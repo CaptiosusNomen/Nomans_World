@@ -1,0 +1,58 @@
+{
+  "800x200R": {
+    "ImageSize":[800,200],
+    "BackGroundSize":[800,200],
+    "BackGroundLocation":[0, 0],
+    "TextSize":[33, 35],
+    "TextLocation": [40, 40],
+    "FaceSize":[200, 200],
+    "FaceLocation":[600, 0],
+    "BorderSize":[800, 200],
+    "BorderLocation":[0, 0],
+    "TextBorderSize":[800, 200],
+    "TextBorderLocation":[0, 0],
+    "FaceBorderSize":[200, 200],
+    "FaceBorderLocation":[600, 0]
+  },
+  "800x200L": {
+    "ImageSize":[800,200],
+    "BackGroundSize":[800,200],
+    "BackGroundLocation":[0, 0],
+    "TextSize":[33, 35],
+    "TextLocation": [240, 40],
+    "FaceSize":[200, 200],
+    "FaceLocation":[0, 0],
+    "BorderSize":[800, 200],
+    "BorderLocation":[0, 0],
+    "TextBorderSize":[800, 200],
+    "TextBorderLocation":[200, 0],
+    "FaceBorderSize":[200, 200],
+    "FaceBorderLocation":[0, 0]
+  },
+    "800x600FT": {
+    "ImageSize":[800,600],
+    "BackGroundSize":[800,600],
+    "BackGroundLocation":[0,0],
+    "TextSize":[33, 55],
+    "TextLocation": [40, 40],
+    "FaceSize":[0,0],
+    "FaceLocation":[0,0],
+    "BorderSize":[800, 600],
+    "BorderLocation":[0,0],
+    "TextBorderSize":[800, 600],
+    "TextBorderLocation":[0,0],
+    "FaceBorderSize":[0,0],
+    "FaceBorderLocation":[0,0]
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
