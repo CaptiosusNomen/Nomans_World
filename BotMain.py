@@ -2,13 +2,11 @@ import discord
 from discord.ext import commands
 import os
 import sys
-from TokenHolder import Token
-Token = Token()
+
 
 
 
 FilePath = os.path.dirname(os.path.abspath(__file__))
-TOKEN = Token
 intents = discord.Intents.all()
 Bot = commands.Bot(command_prefix=["A*"], intents=intents, case_insensitive=True)
 Bot.remove_command('help')
@@ -40,4 +38,7 @@ async def on_ready():
 async def on_resumed():
     pass
 
-Bot.run(TOKEN)
+
+from TokenHolder import Token
+Token = Token()
+Bot.run(Token)
