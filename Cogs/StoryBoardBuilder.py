@@ -1,7 +1,5 @@
-import json
-import tkinter
 from tkinter import ttk
-import sys
+import sys,os,tkinter,json
 from Storyboard import LoadStory, LoadTemplates, MakeSB, FilePath
 from PIL import ImageShow
 
@@ -24,16 +22,17 @@ class StoryBoardBuilder:
         self.SetScenarioParts()
 
     def MakeAndShowImage(self):
-        SBImage = MakeSB(self.Template.get(), self.BackGround.get("1.0", tkinter.END).strip("\n"),
-                         self.Face.get("1.0", tkinter.END).strip("\n"), self.Text.get("1.0", tkinter.END).strip("\n"),
-                         self.Border.get("1.0", tkinter.END).strip("\n"),
-                         self.TextBorder.get("1.0", tkinter.END).strip("\n"),
-                         self.FaceBorder.get("1.0", tkinter.END).strip("\n"))
+        SBImage = MakeSB(self.Template.get(), self.BackGround.get(),
+                         self.Face.get(),
+                         self.Text.get("1.0", tkinter.END).strip("\n"),
+                         self.Border.get(),
+                         self.TextBorder.get(),
+                         self.FaceBorder.get())
         ImageShow.show(SBImage)
         return
 
     def SetScenarios(self):
-        self.CurrentScenario = ttk.Combobox(self.window, width=20)
+        self.CurrentScenario = ttk.Combobox(self.window, width=25)
         self.PostTextButton = tkinter.Button(self.window, text="Load Scenario ", command=self.SetScenarioParts)
         CurrentScenarioList = []
         StoryDB = ReloadStory()
@@ -48,22 +47,12 @@ class StoryBoardBuilder:
         StoryDB = ReloadStory()
 
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Template"] = self.Template.get()
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"] = self.BackGround.get("1.0",
-                                                                                                         tkinter.END).strip(
-            "\n")
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"] = self.Face.get("1.0", tkinter.END).strip(
-            "\n")
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Text"] = self.Text.get("1.0", tkinter.END).strip(
-            "\n")
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Border"] = self.Border.get("1.0",
-                                                                                                 tkinter.END).strip(
-            "\n")
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["TextBorder"] = self.TextBorder.get("1.0",
-                                                                                                         tkinter.END).strip(
-            "\n")
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["FaceBorder"] = self.FaceBorder.get("1.0",
-                                                                                                         tkinter.END).strip(
-            "\n")
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"] = self.BackGround.get()
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"] = self.Face.get()
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Text"] = self.Text.get("1.0",tkinter.END).strip("\n")
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Border"] = self.Border.get()
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["TextBorder"] = self.TextBorder.get()
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["FaceBorder"] = self.FaceBorder.get()
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"] = self.ChoiceDict
         self.SaveStoryDB(StoryDB)
 
@@ -95,40 +84,9 @@ class StoryBoardBuilder:
             self.DescriptionLabel = tkinter.Label(self.window, text="Description")
             self.DescriptionLabel.grid(column=3, row=3)
 
-            self.BackGround = tkinter.Text(self.window, height=1, width=45)
-            self.BackGround.insert("1.0", chars="")
-            self.BackGround.grid(column=4, row=6)
-            self.BackGroundLabel = tkinter.Label(self.window, text="BackGround")
-            self.BackGroundLabel.grid(column=3, row=6)
-            self.Face = tkinter.Text(self.window, height=1, width=45)
-            self.Face.insert("1.0", chars="")
-            self.Face.grid(column=4, row=7)
-            self.FaceLabel = tkinter.Label(self.window, text="Face")
-            self.FaceLabel.grid(column=3, row=7)
-            self.Text = tkinter.Text(self.window, height=8, width=45)
-            self.Text.insert("1.0", chars="")
-            self.Text.grid(column=4, row=8)
-            self.TextLabel = tkinter.Label(self.window, text="Text")
-            self.TextLabel.grid(column=3, row=8)
-            self.Border = tkinter.Text(self.window, height=1, width=45)
-            self.Border.insert("1.0", chars="")
-            self.Border.grid(column=4, row=9)
-            self.BorderLabel = tkinter.Label(self.window, text="Border")
-            self.BorderLabel.grid(column=3, row=9)
-            self.TextBorder = tkinter.Text(self.window, height=1, width=45)
-            self.TextBorder.insert("1.0", chars="")
-            self.TextBorder.grid(column=4, row=10)
-            self.TextBorderLabel = tkinter.Label(self.window, text="Text Border")
-            self.TextBorderLabel.grid(column=3, row=10)
-            self.FaceBorder = tkinter.Text(self.window, height=1, width=45)
-            self.FaceBorder.insert("1.0", chars="")
-            self.FaceBorder.grid(column=4, row=11)
-            self.FaceBorderLabel = tkinter.Label(self.window, text="Face Border")
-            self.FaceBorderLabel.grid(column=3, row=11)
-
 
         else:
-            self.Template = ttk.Combobox(self.window, height=1)
+            self.Template = ttk.Combobox(self.window, height=1, width=45)
             AllTemplates = LoadTemplates()
             AllTemplatesList = []
             Count = -1
@@ -144,33 +102,46 @@ class StoryBoardBuilder:
             self.TemplateLabel = tkinter.Label(self.window, text="Template")
             self.TemplateLabel.grid(column=3, row=5)
 
-            if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"] is None or "":
-                self.BackGround = tkinter.Text(self.window, height=1, width=45)
-                self.BackGround.insert("1.0", chars="")
-                self.BackGround.grid(column=4, row=6)
-                self.BackGroundLabel = tkinter.Label(self.window, text="BackGround")
-                self.BackGroundLabel.grid(column=3, row=6)
-            else:
-                self.BackGround = tkinter.Text(self.window, height=1, width=45)
-                self.BackGround.insert("1.0",
-                                       chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"])
-                self.BackGround.grid(column=4, row=6)
-                self.BackGroundLabel = tkinter.Label(self.window, text="BackGround")
-                self.BackGroundLabel.grid(column=3, row=6)
+            self.BackGround = ttk.Combobox(self.window, height=1, width=45)
+            AllImagesList = [""]
+            if sys.platform == "linux" or sys.platform == "linux2":
+                for file in os.listdir(f"{FilePath}/Files/Images/BackGround"):
+                    AllImagesList.append(file.rstrip(".png"))
+            if sys.platform == "win32" or sys.platform == "win64":
+                for file in os.listdir(f"{FilePath}\\Files\\Images\\BackGround"):
+                    AllImagesList.append(file.rstrip(".png"))
+            Count = -1
+            Current = 0
+            for each in AllImagesList:
+                Count += 1
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"]:
+                    Current = Count
+            self.BackGround['values'] = AllImagesList
+            self.BackGround.current(Current)
+            self.BackGround.grid(column=4, row=6)
+            self.BackGroundLabel = tkinter.Label(self.window, text="BackGround")
+            self.BackGroundLabel.grid(column=3, row=6)
 
-            if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"] is None or "":
-                self.Face = tkinter.Text(self.window, height=1, width=45)
-                self.Face.insert("1.0", chars="")
-                self.Face.grid(column=4, row=7)
-                self.FaceLabel = tkinter.Label(self.window, text="Face")
-                self.FaceLabel.grid(column=3, row=7)
+            self.Face = ttk.Combobox(self.window, height=1, width=45)
+            AllImagesList = [""]
+            if sys.platform == "linux" or sys.platform == "linux2":
+                for file in os.listdir(f"{FilePath}/Files/Images/Face"):
+                    AllImagesList.append(file.rstrip(".png"))
+            if sys.platform == "win32" or sys.platform == "win64":
+                for file in os.listdir(f"{FilePath}\\Files\\Images\\Face"):
+                    AllImagesList.append(file.rstrip(".png"))
+            Count = -1
+            Current = 0
+            for each in AllImagesList:
+                Count += 1
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"]:
+                    Current = Count
+            self.Face['values'] = AllImagesList
+            self.Face.current(Current)
+            self.Face.grid(column=4, row=7)
+            self.FaceLabel = tkinter.Label(self.window, text="Face")
+            self.FaceLabel.grid(column=3, row=7)
 
-            else:
-                self.Face = tkinter.Text(self.window, height=1, width=45)
-                self.Face.insert("1.0", chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"])
-                self.Face.grid(column=4, row=7)
-                self.FaceLabel = tkinter.Label(self.window, text="Face")
-                self.FaceLabel.grid(column=3, row=7)
 
             if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Text"] is None or "":
                 self.Text = tkinter.Text(self.window, height=8, width=45)
@@ -186,53 +157,69 @@ class StoryBoardBuilder:
                 self.TextLabel = tkinter.Label(self.window, text="Text")
                 self.TextLabel.grid(column=3, row=8)
 
-            if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Border"] is None or "":
-                self.Border = tkinter.Text(self.window, height=1, width=45)
-                self.Border.insert("1.0", chars="")
-                self.Border.grid(column=4, row=9)
-                self.BorderLabel = tkinter.Label(self.window, text="Border")
-                self.BorderLabel.grid(column=3, row=9)
 
-            else:
-                self.Border = tkinter.Text(self.window, height=1, width=45)
-                self.Border.insert("1.0", chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Border"])
-                self.Border.grid(column=4, row=9)
-                self.BorderLabel = tkinter.Label(self.window, text="Border")
-                self.BorderLabel.grid(column=3, row=9)
+            self.Border = ttk.Combobox(self.window, height=1, width=45)
+            AllImagesList = [""]
+            if sys.platform == "linux" or sys.platform == "linux2":
+                for file in os.listdir(f"{FilePath}/Files/Images/Border"):
+                    AllImagesList.append(file.rstrip(".png"))
+            if sys.platform == "win32" or sys.platform == "win64":
+                for file in os.listdir(f"{FilePath}\\Files\\Images\\Border"):
+                    AllImagesList.append(file.rstrip(".png"))
+            Count = -1
+            Current = 0
+            for each in AllImagesList:
+                Count += 1
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Border"]:
+                    Current = Count
+            self.Border['values'] = AllImagesList
+            self.Border.current(Current)
+            self.Border.grid(column=4, row=9)
+            self.BorderLabel = tkinter.Label(self.window, text="Border")
+            self.BorderLabel.grid(column=3, row=9)
 
-            if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["TextBorder"] is None or "":
-                self.TextBorder = tkinter.Text(self.window, height=1, width=45)
-                self.TextBorder.insert("1.0", chars="")
-                self.TextBorder.grid(column=4, row=10)
-                self.TextBorderLabel = tkinter.Label(self.window, text="Text Border")
-                self.TextBorderLabel.grid(column=3, row=10)
+            self.TextBorder = ttk.Combobox(self.window, height=1, width=45)
+            AllImagesList = [""]
+            if sys.platform == "linux" or sys.platform == "linux2":
+                for file in os.listdir(f"{FilePath}/Files/Images/TextBorder"):
+                    AllImagesList.append(file.rstrip(".png"))
+            if sys.platform == "win32" or sys.platform == "win64":
+                for file in os.listdir(f"{FilePath}\\Files\\Images\\TextBorder"):
+                    AllImagesList.append(file.rstrip(".png"))
+            Count = -1
+            Current = 0
+            for each in AllImagesList:
+                Count += 1
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["TextBorder"]:
+                    Current = Count
+            self.TextBorder['values'] = AllImagesList
+            self.TextBorder.current(Current)
+            self.TextBorder.grid(column=4, row=10)
+            self.TextBorderLabel = tkinter.Label(self.window, text="Text Border")
+            self.TextBorderLabel.grid(column=3, row=10)
 
-            else:
-                self.TextBorder = tkinter.Text(self.window, height=1, width=45)
-                self.TextBorder.insert("1.0",
-                                       chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["TextBorder"])
-                self.TextBorder.grid(column=4, row=10)
-                self.TextBorderLabel = tkinter.Label(self.window, text="Text Border")
-                self.TextBorderLabel.grid(column=3, row=10)
+            self.FaceBorder = ttk.Combobox(self.window, height=1, width=45)
+            AllImagesList = [""]
+            if sys.platform == "linux" or sys.platform == "linux2":
+                for file in os.listdir(f"{FilePath}/Files/Images/FaceBorder"):
+                    AllImagesList.append(file.rstrip(".png"))
+            if sys.platform == "win32" or sys.platform == "win64":
+                for file in os.listdir(f"{FilePath}\\Files\\Images\\FaceBorder"):
+                    AllImagesList.append(file.rstrip(".png"))
+            Count = -1
+            Current = 0
+            for each in AllImagesList:
+                Count += 1
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["FaceBorder"]:
+                    Current = Count
+            self.FaceBorder['values'] = AllImagesList
+            self.FaceBorder.current(Current)
+            self.FaceBorder.grid(column=4, row=11)
+            self.FaceBorderLabel = tkinter.Label(self.window, text="Face Border")
+            self.FaceBorderLabel.grid(column=3, row=11)
 
-            if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["FaceBorder"] is None or "":
-                self.FaceBorder = tkinter.Text(self.window, height=1, width=45)
-                self.FaceBorder.insert("1.0", chars="")
-                self.FaceBorder.grid(column=4, row=11)
-                self.FaceBorderLabel = tkinter.Label(self.window, text="Face Border")
-                self.FaceBorderLabel.grid(column=3, row=11)
-
-            else:
-                self.FaceBorder = tkinter.Text(self.window, height=1, width=45)
-                self.FaceBorder.insert("1.0",
-                                       chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["FaceBorder"])
-                self.FaceBorder.grid(column=4, row=11)
-                self.FaceBorderLabel = tkinter.Label(self.window, text="Face Border")
-                self.FaceBorderLabel.grid(column=3, row=11)
             self.ChoiceDict = {}
-
             self.CurrentChoices = ttk.Combobox(self.window, width=20)
-
             CurrentChoicesList = []
             StoryDB = ReloadStory()
             for each in StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"]:
