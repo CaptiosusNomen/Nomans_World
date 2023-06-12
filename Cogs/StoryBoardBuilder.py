@@ -26,7 +26,7 @@ class StoryBoardBuilder:
         self.SetScenarioParts()
 
     def MakeAndShowImage(self):
-        SBImage = MakeSB(self.Template.get("1.0", tkinter.END).strip("\n"), self.BackGround.get("1.0", tkinter.END).strip("\n"),
+        SBImage = MakeSB(self.Template.get(), self.BackGround.get("1.0", tkinter.END).strip("\n"),
                self.Face.get("1.0", tkinter.END).strip("\n"), self.Text.get("1.0", tkinter.END).strip("\n"),
                self.Border.get("1.0", tkinter.END).strip("\n"), self.TextBorder.get("1.0", tkinter.END).strip("\n"),
                self.FaceBorder.get("1.0", tkinter.END).strip("\n"))
@@ -48,7 +48,7 @@ class StoryBoardBuilder:
     def SaveScenarioPart(self):
         StoryDB = ReloadStory()
 
-        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Template"] = self.Template.get("1.0", tkinter.END).strip("\n")
+        StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Template"] = self.Template.get()
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"] = self.BackGround.get("1.0", tkinter.END).strip("\n")
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Face"] = self.Face.get("1.0", tkinter.END).strip("\n")
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Text"] = self.Text.get("1.0", tkinter.END).strip("\n")
@@ -88,12 +88,23 @@ class StoryBoardBuilder:
             self.DescriptionLabel = tkinter.Label(self.window, text="Description")
             self.DescriptionLabel.grid(column=3, row=3)
         else:
-
-            self.Template = tkinter.Text(self.window, height=1)
-            self.Template.insert("1.0", chars=StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Template"])
+            self.Template = ttk.Combobox(self.window, height=1)
+            AllTemplates=LoadTemplates()
+            AllTemplatesList=[]
+            Count=-1
+            Current=0
+            for each in AllTemplates:
+                Count+=1
+                AllTemplatesList.append(each)
+                if each == StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Template"]:
+                    Current=Count
+            self.Template['values'] = AllTemplatesList
+            self.Template.current(Current)
             self.Template.grid(column=4, row=5)
             self.TemplateLabel = tkinter.Label(self.window, text="Template")
             self.TemplateLabel.grid(column=3, row=5)
+
+
 
             if StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["BackGround"] is None or "":
                 self.BackGround = tkinter.Text(self.window, height=1)
