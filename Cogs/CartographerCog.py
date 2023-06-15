@@ -43,49 +43,52 @@ class NaniteBot(commands.Cog):
                 everyone: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
                                                              topic=self.Map[PlaceToMake][Location]["Topic"],
                                                              category=NewLocation)
-            LocationEmbed = discord.Embed(colour=0x31f25c,
-                                  description=self.Map[PlaceToMake][Location]["Description"])
+            await self.LocationPost(NewLocation,NewChannel)
+    async def LocationPost(self,Category,Channel):
+        LocationEmbed = discord.Embed(colour=0x31f25c,
+                              description=self.Map[Category.name][Channel.name]["Description"])
+        try:
+            if sys.platform == "linux" or sys.platform == "linux2":
+                Image=discord.File(f"{FilePath}/Files/Images/Locations/{self.Map[Category.name][Channel.name]['Image']}.jpg")
+                LocationEmbed.set_image(url=f"attachment://{FilePath}/Files/Images/Locations/{self.Map[Category.name][Channel.name]['Image']}.jpg")
+            if sys.platform == "win32" or sys.platform == "win64":
+                Image=discord.File(f"{FilePath}\\Files\\Images\\Locations\\{self.Map[Category.name][Channel.name]['Image']}.jpg")
+                LocationEmbed.set_image(url=f"attachment://{FilePath}\\Files\\Images\\Locations\\{self.Map[Category.name][Channel.name]['Image']}.jpg")
+        except FileNotFoundError:
             try:
                 if sys.platform == "linux" or sys.platform == "linux2":
-                    Image=discord.File(f"{FilePath}/Files/Images/Locations/{self.Map[PlaceToMake][Location]['Image']}.jpg")
-                    LocationEmbed.set_image(url=f"attachment://{FilePath}/Files/Images/Locations/{self.Map[PlaceToMake][Location]['Image']}.jpg")
+                    Image=discord.File(f"{FilePath}/Files/Images/Locations/{self.Map[Category.name][Channel.name]['Image']}.png")
+                    LocationEmbed.set_image(url=f"attachment://{FilePath}/Files/Images/Locations/{self.Map[Category.name][Channel.name]['Image']}.png")
                 if sys.platform == "win32" or sys.platform == "win64":
-                    Image=discord.File(f"{FilePath}\\Files\\Images\\Locations\\{self.Map[PlaceToMake][Location]['Image']}.jpg")
-                    LocationEmbed.set_image(url=f"attachment://{FilePath}\\Files\\Images\\Locations\\{self.Map[PlaceToMake][Location]['Image']}.jpg")
+                    Image=discord.File(f"{FilePath}\\Files\\Images\\Locations\\{self.Map[Category.name][Channel.name]['Image']}.png")
+                    LocationEmbed.set_image(url=f"attachment://{FilePath}\\Files\\Images\\Locations\\{self.Map[Category.name][Channel.name]['Image']}.png")
             except FileNotFoundError:
-                if sys.platform == "linux" or sys.platform == "linux2":
-                    Image=discord.File(f"{FilePath}/Files/Images/Locations/{self.Map[PlaceToMake][Location]['Image']}.png")
-                    LocationEmbed.set_image(url=f"attachment://{FilePath}/Files/Images/Locations/{self.Map[PlaceToMake][Location]['Image']}.png")
-                if sys.platform == "win32" or sys.platform == "win64":
-                    Image=discord.File(f"{FilePath}\\Files\\Images\\Locations\\{self.Map[PlaceToMake][Location]['Image']}.png")
-                    LocationEmbed.set_image(url=f"attachment://{FilePath}\\Files\\Images\\Locations\\{self.Map[PlaceToMake][Location]['Image']}.png")
+                pass
+        LocationView = discord.ui.View()
+        for NPC in self.Map[Category.name][Channel.name]["NPC"]:
+            print(NPC)
+            NPCButton=discord.ui.Button(label=NPC)
+            async def NPCButtonCallback(interaction):
+                Choices = SBImageAssembly(NPC,"Start")
+                TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
+                SBView = discord.ui.View()
+                Inventory = {}
+                for each in Choices:
+                    if each == "Scenario":
+                        pass
+                    else:
+                        Style = ColorPicker(Choices, each)
+                        ChoiceButton = discord.ui.Button(label=each,
+                                                         custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}",
+                                                         style=Style)
+                        ChoiceButton.callback = self.ChoiceButtonCallback
+                        SBView.add_item(ChoiceButton)
+                await interaction.response.send_message(ephemeral=True, file=TempFile, view=SBView)
 
+            LocationView.add_item(NPCButton)
+            NPCButton.callback = NPCButtonCallback
 
-            LocationView = discord.ui.View()
-            for NPC in self.Map[PlaceToMake][Location]["NPC"]:
-                print(NPC)
-                NPCButton=discord.ui.Button(label=NPC)
-                async def NPCButtonCallback(interaction):
-                    Choices = SBImageAssembly(NPC,"Start")
-                    TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
-                    SBView = discord.ui.View()
-                    Inventory = {}
-                    for each in Choices:
-                        if each == "Scenario":
-                            pass
-                        else:
-                            Style = ColorPicker(Choices, each)
-                            ChoiceButton = discord.ui.Button(label=each,
-                                                             custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}",
-                                                             style=Style)
-                            ChoiceButton.callback = self.ChoiceButtonCallback
-                            SBView.add_item(ChoiceButton)
-                    await interaction.response.send_message(ephemeral=True, file=TempFile, view=SBView)
-
-                LocationView.add_item(NPCButton)
-                NPCButton.callback = NPCButtonCallback
-
-            await NewChannel.send(embed=LocationEmbed,view=LocationView,file=Image)
+        await Channel.send(embed=LocationEmbed,view=LocationView,file=Image)
 
     async def ChoiceButtonCallback(self,interaction):
         Data = interaction.data['custom_id'].split(",")
@@ -110,7 +113,7 @@ class NaniteBot(commands.Cog):
                 pass
             else:
                 Style = ColorPicker(Choices, each)
-                if each == "End":
+                if each == "End Mission":
                     EndButton = discord.ui.Button(label=each,
                                 custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}")
                     EndButton.callback = self.EndButtonCallback
