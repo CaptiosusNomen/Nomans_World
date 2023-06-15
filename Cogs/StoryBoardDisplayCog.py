@@ -30,7 +30,7 @@ class StoryBoardDisplay(commands.Cog):
     @commands.command(pass_context=True)
     async def Demo(self, ctx):
         await ctx.message.delete()
-        await self.StoryBoardDisplayMessage(ctx.channel,"2-C", "10")
+        await self.StoryBoardDisplayMessage(ctx.channel,"Wizard", "Start")
 
     @commands.is_owner()
     @commands.command(pass_context=True)
@@ -66,7 +66,10 @@ class StoryBoardDisplay(commands.Cog):
                                 custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}")
                     EndButton.callback = self.EndButtonCallback
                     ChoiceView.add_item(EndButton)
-
+                if each == "End Conversation":
+                    StopButton = discord.ui.Button(label=each)
+                    StopButton.callback = self.StopButtonCallback
+                    ChoiceView.add_item(StopButton)
                 elif Choices[each]['Requirement'] != "":
                     if Choices[each]['Requirement'] in Inventory:
                         if Choices[each]['Price'] != "":
@@ -112,6 +115,9 @@ class StoryBoardDisplay(commands.Cog):
         await interaction.response.edit_message(view=None)
         await interaction.channel.send(
             f"{interaction.user.name} has finished {Data[0]} with a ranking of {Data[1]} and found {Data[2]}")
+
+    async def StopButtonCallback(self,interaction):
+        await interaction.response.edit_message(delete_after=.1)
 
     async def SBLaunchButtonCallback(self,interaction):
         Data = interaction.data['custom_id'].split(",")
