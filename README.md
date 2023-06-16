@@ -55,4 +55,10 @@ and
 ```
 Combine to create~
 
-![](http://via.placeholder.com/200x150)
+![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Channels.png?raw=true)
+![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/TownCenterPost.png?raw=true)
+
+Clicking on the button leads to
+
+![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk1.png?raw=true)
+![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk2.png?raw=true)
