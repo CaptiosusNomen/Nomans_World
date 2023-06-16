@@ -1,12 +1,8 @@
 {"TestTown":{
-
   "town_center": {
     "Description":"The Center of town",
     "Topic": "",
     "Image":"TownCenter",
     "NPC":[
       "Wizard"
-    ]
-  }
- }
-}
+    ]}}}

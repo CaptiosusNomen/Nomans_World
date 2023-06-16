@@ -38,6 +38,10 @@ class NaniteBot(commands.Cog):
         self.Map=LoadMap()
         everyone = ctx.guild.default_role
         NewLocation = await ctx.guild.create_category(PlaceToMake)
+        TextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
+            everyone: discord.PermissionOverwrite(read_messages=True, send_messages=True)},
+                                                         topic="The place for PBP (Play By Post)",
+                                                         category=NewLocation)
         for Location in self.Map[PlaceToMake]:
             NewChannel = await ctx.guild.create_text_channel(f"{Location}", overwrites={
                 everyone: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
