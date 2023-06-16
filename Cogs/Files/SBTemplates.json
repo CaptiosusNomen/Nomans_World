@@ -43,6 +43,36 @@
     "TextBorderLocation":[0,0],
     "FaceBorderSize":[0,0],
     "FaceBorderLocation":[0,0]
+  },
+      "800x400FT": {
+    "ImageSize":[800,400],
+    "BackGroundSize":[800,400],
+    "BackGroundLocation":[0,0],
+    "TextSize":[33, 55],
+    "TextLocation": [40, 40],
+    "FaceSize":[0,0],
+    "FaceLocation":[0,0],
+    "BorderSize":[800, 600],
+    "BorderLocation":[0,0],
+    "TextBorderSize":[800, 400],
+    "TextBorderLocation":[0,0],
+    "FaceBorderSize":[0,0],
+    "FaceBorderLocation":[0,0]
+  },
+  "800x200FT": {
+    "ImageSize":[800,200],
+    "BackGroundSize":[800,200],
+    "BackGroundLocation":[0,0],
+    "TextSize":[33, 55],
+    "TextLocation": [40, 40],
+    "FaceSize":[0,0],
+    "FaceLocation":[0,0],
+    "BorderSize":[800, 200],
+    "BorderLocation":[0,0],
+    "TextBorderSize":[800, 200],
+    "TextBorderLocation":[0,0],
+    "FaceBorderSize":[0,0],
+    "FaceBorderLocation":[0,0]
   }
 }
 
