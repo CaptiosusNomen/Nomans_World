@@ -23,7 +23,7 @@ and
     "Name": "TestLich",
     "Description": "A little Description box to help keep track of things"},
   "Start": {
-    "Template": "800x600FT",
+    "Template": "800x200FT",
     "BackGround": "",
     "Face": "",
     "Text": "You see living bones wrapped in glorious cloth and jewels. Getting closer you know there is power coming off of this thing as you feel all the hair on your body being tugged in whatever way the energy is flowing.",
