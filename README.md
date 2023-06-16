@@ -62,3 +62,12 @@ Clicking on the button leads to
 
 ![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk1.png?raw=true)
 ![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk2.png?raw=true)
+________________________________________________________________________________________________________________________
+
+## StoryBoardBuilder.py
+
+A tool is included to help with making dialogue and keeping track of what you have so far.
+
+![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/SBGUI.png?raw=true)
+
+Far from the best thing but it was good practice for Tkinter. May or may not get an update. 
