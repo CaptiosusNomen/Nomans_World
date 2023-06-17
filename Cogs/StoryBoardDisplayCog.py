@@ -26,11 +26,7 @@ class StoryBoardDisplay(commands.Cog):
 
 
 
-    @commands.is_owner()
-    @commands.command(pass_context=True)
-    async def Demo(self, ctx):
-        await ctx.message.delete()
-        await self.StoryBoardDisplayMessage(ctx.channel,"Wizard", "Start")
+
 
     @commands.is_owner()
     @commands.command(pass_context=True)
@@ -110,6 +106,8 @@ class StoryBoardDisplay(commands.Cog):
 
         await interaction.response.edit_message(attachments=[TempFile], view=ChoiceView)
 
+    async def CommandButtonCallback(self,interaction):
+        pass
     async def EndButtonCallback(self,interaction):
         Data = interaction.data['custom_id'].split(",")
         await interaction.response.edit_message(view=None)

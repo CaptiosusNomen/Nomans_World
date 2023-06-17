@@ -299,7 +299,8 @@ class StoryBoardBuilder:
                  "Price": StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][each]["Price"],
                  "Destination": StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][each][
                      "Destination"],
-                 "Color": StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][each]["Color"]}
+                 "Color": StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][each]["Color"],
+                 "Command": StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][each]["Command"]}
 
     def UpdateChoiceDisply(self):
         self.ChoiceRow = 11
@@ -364,6 +365,18 @@ class StoryBoardBuilder:
         ChoiceColorLabel = tkinter.Label(self.window, text=f"Color")
         ChoiceColorLabel.grid(column=3, row=self.ChoiceRow)
 
+        ChoiceCommand = tkinter.Text(self.window, height=1, width=45)
+        if self.ChoiceDict[self.CurrentChoices.get()]["Command"] is None or "":
+            ChoiceCommand.insert("1.0", chars="")
+        else:
+            ChoiceCommand.insert("1.0", chars=self.ChoiceDict[self.CurrentChoices.get()]["Command"])
+
+        self.ChoiceRow += 1
+        ChoiceCommand.grid(column=4, row=self.ChoiceRow)
+        ChoiceCommandLabel = tkinter.Label(self.window, text=f"Command")
+        ChoiceCommandLabel.grid(column=3, row=self.ChoiceRow)
+
+
     def DeleteChoice(self):
         StoryDB = ReloadStory()
         del StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"][self.CurrentChoices.get()]
@@ -404,8 +417,16 @@ class StoryBoardBuilder:
         self.NewColorLabel = tkinter.Label(self.top, text="Color", width=9)
         self.NewColorLabel.grid(column=0, row=5)
 
+
+        self.NewCommand = tkinter.Entry(self.top, width=25)
+        self.NewCommand.grid(column=1, row=6)
+        self.NewCommandLabel = tkinter.Label(self.top, text="Command", width=9)
+        self.NewCommandLabel.grid(column=0, row=6)
+
+
+
         AddButton = tkinter.Button(self.top, text="Add", command=self.AddChoiceToDict)
-        AddButton.grid(column=1, row=6)
+        AddButton.grid(column=1, row=7)
 
     def AddChoiceToDict(self):
         self.ChoiceDict[self.NewName.get()] = \
@@ -413,7 +434,8 @@ class StoryBoardBuilder:
              "Requirement": self.NewRequirement.get(),
              "Price": self.NewPrice.get(),
              "Destination": self.NewDestination.get(),
-             "Color": self.NewColor.get()}
+             "Color": self.NewColor.get(),
+             "Command": self.NewCommand.get()}
         StoryDB = ReloadStory()
         StoryDB[self.CurrentScenario.get()][self.ScenarioActs.get()]["Choices"] = self.ChoiceDict
         self.SaveStoryDB(StoryDB)
@@ -447,7 +469,7 @@ class StoryBoardBuilder:
                                                                        "Choices": {
                                                                            "Next": {"Reward": None, "Requirement": None,
                                                                                     "Price": None, "Destination": "10",
-                                                                                    "Color": "green"}}}
+                                                                                    "Color": "green", "Command": None}}}
 
         if sys.platform == "linux" or sys.platform == "linux2":
             with open(f"{FilePath}/Files/Storys/StoryDB.json", "w") as JSON:

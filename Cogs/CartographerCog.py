@@ -4,9 +4,8 @@ import os
 import json
 import ast
 import sys
-from Cogs.StoryBoardDisplayCog import ColorPicker
 from Cogs.Storyboard import SBImageAssembly
-
+from Cogs.ConversationCommandsCog import ConversationCommands
 
 
 
@@ -14,6 +13,16 @@ FilePath = os.path.dirname(os.path.abspath(__file__))
 intents = discord.Intents.all()
 bot = discord.Client(intents=intents)
 
+def ColorPicker(Choices, each):
+    if Choices[each]['Color'] == "green":
+        Style = discord.ButtonStyle.green
+    elif Choices[each]['Color'] == "grey":
+        Style = discord.ButtonStyle.grey
+    elif Choices[each]['Color'] == "red":
+        Style = discord.ButtonStyle.red
+    elif Choices[each]['Color'] == "blurple":
+        Style = discord.ButtonStyle.blurple
+    return Style
 
 def LoadMap():
     if sys.platform == "linux" or sys.platform == "linux2":
@@ -28,7 +37,12 @@ class NaniteBot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.is_owner()
+    @commands.command(pass_context=True)
+    async def Demo(self, ctx):
 
+        Do = getattr(ConversationCommands, "PlaySong")
+        await Do(ConversationCommands(bot=self.bot),ctx)
 
     @commands.is_owner()
     @commands.command(aliases=["Make", "Make The", "Make My", "Create The", "Create My", "Let There Be"],
@@ -38,7 +52,7 @@ class NaniteBot(commands.Cog):
         self.Map=LoadMap()
         everyone = ctx.guild.default_role
         NewLocation = await ctx.guild.create_category(PlaceToMake)
-        TextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
+        PBPTextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
             everyone: discord.PermissionOverwrite(read_messages=True, send_messages=True)},
                                                          topic="The place for PBP (Play By Post)",
                                                          category=NewLocation)
@@ -76,14 +90,17 @@ class NaniteBot(commands.Cog):
                 Choices = SBImageAssembly(NPC,"Start")
                 TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
                 SBView = discord.ui.View()
-                Inventory = {}
+                Inventory = {""}
                 for each in Choices:
                     if each == "Scenario":
                         pass
                     else:
                         Style = ColorPicker(Choices, each)
                         ChoiceButton = discord.ui.Button(label=each,
-                                                         custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}",
+                                                         custom_id=f"{Choices['Scenario']},"
+                                                                   f"{Choices[each]['Destination']},"
+                                                                   f"{Inventory},"
+                                                                   f"{Choices[each]['Command']}",
                                                          style=Style)
                         ChoiceButton.callback = self.ChoiceButtonCallback
                         SBView.add_item(ChoiceButton)
@@ -97,9 +114,10 @@ class NaniteBot(commands.Cog):
     async def ChoiceButtonCallback(self,interaction):
         Data = interaction.data['custom_id'].split(",")
         Inventory = ast.literal_eval(Data[2])
+
         try:
-            if Data[3]!=None:
-                InvintoryUpdate = Data[3].split(":")
+            if Data[4]!=None:
+                InvintoryUpdate = Data[4].split(":")
                 Items = InvintoryUpdate[1].split(",")
                 if InvintoryUpdate[0]=="Price":
                     for each in Items:
@@ -131,13 +149,12 @@ class NaniteBot(commands.Cog):
                         if Choices[each]['Price'] != "":
                             if Choices[each]['Price'] in Inventory:
 
-                                ChoiceButton = discord.ui.Button(label=f"{each}  Requirement:{Choices[each]['Requirement']}  Cost:{Choices[each]['Price']}",
-                                                                 custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},Price:{Choices[each]['Price']}",
+                                ChoiceButton = discord.ui.Button(label=f"{each} Cost:{Choices[each]['Price']}",
+                                                                 custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},{Choices[each]['Command']},Price:{Choices[each]['Price']}",
                                                              style=Style)
                         else:
-                            ChoiceButton = discord.ui.Button(label=f"{each}"
-                                                                   f" Requirement:{Choices[each]['Requirement']}",
-                                                             custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}",
+                            ChoiceButton = discord.ui.Button(label=f"{each}",
+                                                             custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},{Choices[each]['Command']}",
                                                              style=Style)
                         ChoiceButton.callback = self.ChoiceButtonCallback
                         ChoiceView.add_item(ChoiceButton)
@@ -145,26 +162,33 @@ class NaniteBot(commands.Cog):
                 elif Choices[each]['Price'] != "":
                     if Choices[each]['Price'] in Inventory:
                         ChoiceButton = discord.ui.Button(label=f"{each}  Cost:{Choices[each]['Price']}",
-                                                         custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},Price:{Choices[each]['Price']}",
+                                                         custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},{Choices[each]['Command']},Price:{Choices[each]['Price']}",
                                                          style=Style)
                         ChoiceButton.callback = self.ChoiceButtonCallback
                         ChoiceView.add_item(ChoiceButton)
 
                 elif Choices[each]['Reward'] != "":
                     ChoiceButton = discord.ui.Button(label=f"{each}            Reward:{Choices[each]['Reward']}",
-                                                     custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},Reward:{Choices[each]['Reward']}",
+                                                     custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},{Choices[each]['Command']},Reward:{Choices[each]['Reward']}",
                                                      style=Style)
                     ChoiceButton.callback = self.ChoiceButtonCallback
                     ChoiceView.add_item(ChoiceButton)
 
                 else:
                     ChoiceButton = discord.ui.Button(label=each,
-                                                     custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory}",
+                                                     custom_id=f"{Choices['Scenario']},{Choices[each]['Destination']},{Inventory},{Choices[each]['Command']}",
                                                      style=Style)
                     ChoiceButton.callback = self.ChoiceButtonCallback
                     ChoiceView.add_item(ChoiceButton)
 
         await interaction.response.edit_message(attachments=[TempFile], view=ChoiceView)
+        try:
+            if Data[3]!=None:
+                Do = getattr(ConversationCommands, Data[3])
+                await Do(ConversationCommands(bot=self.bot), interaction)
+        except IndexError and AttributeError:
+            pass
+
 
     async def EndButtonCallback(self,interaction):
         Data = interaction.data['custom_id'].split(",")
