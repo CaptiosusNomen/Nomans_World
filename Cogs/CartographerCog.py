@@ -138,7 +138,12 @@ class NaniteBot(commands.Cog):
         except IndexError:
             pass
         Choices = SBImageAssembly(Data[0], Data[1])
-        TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
+
+        if sys.platform.startswith("lin"):
+            TempFile = discord.File(f"{FilePath}/Files/Images/TEMP.png", filename="TEMP.png")
+        if sys.platform.startswith("win"):
+            TempFile = discord.File(rf"{FilePath}\Files\Images\TEMP.png", filename="TEMP.png")
+
         ChoiceView = discord.ui.View(timeout=0)
         for each in Choices:
             if each == "Scenario":
