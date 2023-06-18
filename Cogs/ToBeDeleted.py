@@ -24,10 +24,6 @@ class StoryBoardDisplay(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
-
-
-
     @commands.is_owner()
     @commands.command(pass_context=True)
     async def SBTest(self, ctx):
