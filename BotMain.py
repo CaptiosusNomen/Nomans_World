@@ -16,7 +16,7 @@ async def LoadCogs():
                 print(f"{file} Loaded")
 
     if sys.platform.startswith("win"):
-        for file in os.listdir(f"{FilePath}\\Cogs"):
+        for file in os.listdir(rf"{FilePath}\Cogs"):
             if file.endswith("Cog.py"):
                 await Bot.load_extension(f'Cogs.{file[:-3]}')
                 print(f"{file} Loaded")
