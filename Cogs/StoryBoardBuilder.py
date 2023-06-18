@@ -1,5 +1,5 @@
 from tkinter import ttk
-import sys,os,tkinter,json
+import sys, os, tkinter, json
 from Storyboard import LoadStory, LoadTemplates, MakeSB, FilePath
 from PIL import ImageShow
 
