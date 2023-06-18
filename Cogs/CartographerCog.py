@@ -82,7 +82,7 @@ class NaniteBot(commands.Cog):
                     LocationEmbed.set_image(url=f"attachment://{FilePath}\\Files\\Images\\Locations\\{self.Map[Category.name][Channel.name]['Image']}.png")
             except FileNotFoundError:
                 pass
-        LocationView = discord.ui.View()
+        LocationView = discord.ui.View(timeout=0)
         for NPC in self.Map[Category.name][Channel.name]["NPC"]:
             print(NPC)
             NPCButton=discord.ui.Button(label=NPC)
@@ -129,7 +129,7 @@ class NaniteBot(commands.Cog):
             pass
         Choices = SBImageAssembly(Data[0], Data[1])
         TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
-        ChoiceView = discord.ui.View()
+        ChoiceView = discord.ui.View(timeout=0)
         for each in Choices:
             if each == "Scenario":
                 pass
