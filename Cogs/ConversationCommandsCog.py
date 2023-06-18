@@ -17,9 +17,8 @@ class ConversationCommands(commands.Cog):
         channel = discord.utils.get(ctx.guild.voice_channels, name='Old_Mans_Music')
         if channel is None:
             everyone = ctx.guild.default_role
-            MusicChannel = await ctx.guild.create_voice_channel(f"Old_Mans_Music", overwrites={
-                everyone: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
-                                                             user_limit=16,category=ctx.channel.category,
+            MusicChannel = await ctx.guild.create_voice_channel(f"Old_Mans_Music",
+                                                             user_limit=36,category=ctx.channel.category,
                                                              position=ctx.channel.position+1)
             Voice = await MusicChannel.connect(self_deaf=True)
             await sleep(3)
