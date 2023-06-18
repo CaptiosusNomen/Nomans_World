@@ -16,7 +16,6 @@ class ConversationCommands(commands.Cog):
     async def PlaySong(self, ctx):
         channel = discord.utils.get(ctx.guild.voice_channels, name='Old_Mans_Music')
         if channel is None:
-            everyone = ctx.guild.default_role
             MusicChannel = await ctx.guild.create_voice_channel(f"Old_Mans_Music",
                                                              user_limit=36,category=ctx.channel.category,
                                                              position=ctx.channel.position+1)
