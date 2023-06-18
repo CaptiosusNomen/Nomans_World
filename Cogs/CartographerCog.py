@@ -38,30 +38,32 @@ class NaniteBot(commands.Cog):
         self.bot = bot
 
     @commands.is_owner()
-    @commands.command(pass_context=True)
-    async def Demo(self, ctx):
-
-        Do = getattr(ConversationCommands, "PlaySong")
-        await Do(ConversationCommands(bot=self.bot),ctx)
-
-    @commands.is_owner()
-    @commands.command(aliases=["Make", "Make The", "Make My", "Create The", "Create My", "Let There Be"],
+    @commands.command(aliases=["Make"],
                       pass_context=True)
     async def Create(self, ctx, PlaceToMake):
         await ctx.message.delete()
         self.Map=LoadMap()
         everyone = ctx.guild.default_role
+
         NewLocation = await ctx.guild.create_category(PlaceToMake)
-        PBPTextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
-            everyone: discord.PermissionOverwrite(read_messages=True, send_messages=True)},
-                                                         topic="The place for PBP (Play By Post)",
-                                                         category=NewLocation)
+
         for Location in self.Map[PlaceToMake]:
+            GateRole = discord.utils.get(ctx.guild.roles, name=self.Map[PlaceToMake][Location]["Role"])
+            if GateRole == None:
+                GateRole = await ctx.guild.create_role(name=self.Map[PlaceToMake][Location]["Role"], hoist=False, mentionable=False)
             NewChannel = await ctx.guild.create_text_channel(f"{Location}", overwrites={
-                everyone: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
+                          everyone: discord.PermissionOverwrite(read_messages=False, send_messages=False),
+                          GateRole: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
                                                              topic=self.Map[PlaceToMake][Location]["Topic"],
                                                              category=NewLocation)
             await self.LocationPost(NewLocation,NewChannel)
+
+        PBPTextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
+            everyone: discord.PermissionOverwrite(read_messages=False, send_messages=True),
+            GateRole: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
+                                                             topic="The place for PBP (Play By Post)",
+                                                             category=NewLocation, position=0)
+
     async def LocationPost(self,Category,Channel):
         LocationEmbed = discord.Embed(colour=0x31f25c,
                               description=self.Map[Category.name][Channel.name]["Description"])
