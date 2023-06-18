@@ -45,7 +45,8 @@ class NaniteBot(commands.Cog):
         self.Map=LoadMap()
         everyone = ctx.guild.default_role
 
-        NewLocation = await ctx.guild.create_category(PlaceToMake)
+        NewLocation = await ctx.guild.create_category(name=PlaceToMake)
+        await NewLocation.set_permissions(everyone,read_messages=False, send_messages=False)
 
         for Location in self.Map[PlaceToMake]:
             GateRole = discord.utils.get(ctx.guild.roles, name=self.Map[PlaceToMake][Location]["Role"])
@@ -56,7 +57,9 @@ class NaniteBot(commands.Cog):
                           GateRole: discord.PermissionOverwrite(read_messages=True, send_messages=False)},
                                                              topic=self.Map[PlaceToMake][Location]["Topic"],
                                                              category=NewLocation)
-            await self.LocationPost(NewLocation,NewChannel)
+            await self.LocationPost(NewLocation, NewChannel)
+
+        await NewLocation.set_permissions(GateRole,read_messages=True, send_messages=False)
 
         PBPTextChannel = await ctx.guild.create_text_channel(f"{NewLocation}_pbp", overwrites={
             everyone: discord.PermissionOverwrite(read_messages=False, send_messages=True),
