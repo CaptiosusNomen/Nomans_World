@@ -22,6 +22,7 @@ class ConversationCommands(commands.Cog):
                                                              user_limit=16,category=ctx.channel.category,
                                                              position=ctx.channel.position+1)
             Voice = await MusicChannel.connect(self_deaf=True)
+            await sleep(3)
             Voice.play(discord.FFmpegPCMAudio(source=f"{FilePath}\\Files\\Tears.mp3"))
             await sleep(80)
             await Voice.disconnect()
