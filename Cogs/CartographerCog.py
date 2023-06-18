@@ -93,7 +93,12 @@ class NaniteBot(commands.Cog):
             NPCButton=discord.ui.Button(label=NPC)
             async def NPCButtonCallback(interaction):
                 Choices = SBImageAssembly(NPC,"Start")
-                TempFile = discord.File(f"{FilePath}\\Files\\Images\\TEMP.png", filename="TEMP.png")
+
+                if sys.platform.startswith("lin"):
+                    TempFile = discord.File(f"{FilePath}/Files/Images/TEMP.png", filename="TEMP.png")
+                if sys.platform.startswith("win"):
+                    TempFile = discord.File(rf"{FilePath}\Files\Images\TEMP.png", filename="TEMP.png")
+
                 SBView = discord.ui.View()
                 Inventory = {""}
                 for each in Choices:
