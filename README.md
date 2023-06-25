@@ -2,72 +2,27 @@
 
 Hello and welcome to my attempt at making an RPG game engine on Discord using Discord.py
 
-The idea so far is to create a map layout for a location in one JSON file then have it populated by "NPCs" that will
-then have a dialogue tree for players to go though from another JSON file. 
 
-For example:
-```json
-{"TestTown":{
-  "town_center": {
-    "Description":"The Center of town",
-    "Topic": "",
-    "Image":"TownCenter",
-    "NPC":[
-      "Wizard"
-    ]}}}
-```
-and 
-```json
-{"Wizard":{
-  "Info":{
-    "Name": "TestLich",
-    "Description": "A little Description box to help keep track of things"},
-  "Start": {
-    "Template": "800x200FT",
-    "BackGround": "",
-    "Face": "",
-    "Text": "You see living bones wrapped in glorious cloth and jewels. Getting closer you know there is power coming off of this thing as you feel all the hair on your body being tugged in whatever way the energy is flowing.",
-    "Border": "",
-    "TextBorder": "",
-    "FaceBorder": "",
-    "Choices": {
-      "Next": {
-        "Reward": "",
-        "Requirement": "",
-        "Price": "",
-        "Destination": "next",
-        "Color": "green"}}},
-  "next": {
-    "Template": "800x200R",
-    "BackGround": "",
-    "Face": "Badguy",
-    "Text": "Hey there buddy!",
-    "Border": "",
-    "TextBorder": "GreyTextBackground600X200",
-    "FaceBorder": "",
-    "Choices":{
-      "End Conversation": {
-      "Reward": "",
-        "Requirement": "",
-        "Price": "",
-        "Destination": "",
-        "Color": "green"}}}}}
-```
-Combine to create~
 
-![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Channels.png?raw=true)
-![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/TownCenterPost.png?raw=true)
+## Project Goals:
 
-Clicking on the button leads to
+- Create a system independent tool for storytelling and rpg/ttrpg games on discord. 
+- Modular in design to allow for easy addition of new features. 
+- A User Interface robust enough that players never needs to use text commands.
+- Dev tools to make using this to tell your story an easy process.
 
-![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk1.png?raw=true)
-![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/Talk2.png?raw=true)
-________________________________________________________________________________________________________________________
 
-## StoryBoardBuilder.py
+### Things Made:
 
-A tool is included to help with making dialogue and keeping track of what you have so far.
+- Storyboard. Combining image and text info into a single image then posting along with buttons. Allowing users to experience anything from NPC conversations to branching path mini-adventures. 
+- Cartographer. Using data writen to a JSON file, the bot will create a category and text channels populated with location descriptions and NPC/Mission trigger buttons. 
+- Storyboard_Builder. Tkinter based tool for writing JSON needed for the Storyboard (works but...) 
 
-![](https://github.com/CaptiosusNomen/Nomans_World/blob/master/Cogs/Files/Images/ForShow/SBGUI.png?raw=true)
+### TODO:
 
-Far from the best thing but it was good practice for Tkinter. May or may not get an update.
+- Storyboard_Builder. Total rewrite, what is up now was good Tkinter practice but needs to be remade.
+- Quartermaster. A way to display the inventory of players and shops, as well as a way to buy and sell items. 
+- Field_Marshal. A simple combat system that is made for quick encounters. Not ment to replace normal game combat.
+- Player_Menu. A system so players can access things such as their stats, quest log, items and other stuff.
+
+
